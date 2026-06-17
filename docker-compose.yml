@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    environment:
+      DB_URL: postgresql+asyncpg://demo:demo@db:5432/safety
+      DOWNSTREAM_URL: http://downstream-stub:9000
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER:     demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB:       safety
+    volumes:
+      - safety-pg:/var/lib/postgresql/data
+
+volumes:
+  safety-pg:
