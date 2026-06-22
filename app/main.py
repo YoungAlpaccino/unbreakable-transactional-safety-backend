@@ -29,6 +29,10 @@ async def lifespan(app: FastAPI):
     worker_task = asyncio.create_task(worker.run())
     yield
     worker_task.cancel()
+    try:
+        await worker_task
+    except asyncio.CancelledError:
+        pass
 
 
 app = FastAPI(
